@@ -13,7 +13,9 @@ RUN mkdir /etc/consul-templates
 ENV CT_FILE /etc/consul-templates/nginx.conf
 
 #Setup Nginx File
-ENV NX_FILE /etc/nginx/conf.d/app.conf
+ENV NX_FILE /etc/nginx/nginx.conf
+ADD ./nginx.conf $NX_FILE
+
 
 #Default Variables
 ENV CONSUL consul:8500
@@ -36,7 +38,7 @@ server {                                 \n\
     proxy_pass http://app;               \n\
   }                                      \n\
 }" > $CT_FILE; \
-/usr/sbin/nginx -c /etc/nginx/nginx.conf \
+/usr/sbin/nginx -c $NX_FILE \
 & CONSUL_TEMPLATE_LOG=debug consul-template \
   -consul=$CONSUL \
   -template "$CT_FILE:$NX_FILE:/usr/sbin/nginx -s reload";
