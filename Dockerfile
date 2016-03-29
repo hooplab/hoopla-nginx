@@ -17,7 +17,7 @@ ENV NX_FILE /etc/nginx/conf.d/app.conf
 
 #Default Variables
 ENV CONSUL consul:8500
-ENV SERVICE api
+ENV SERVICE consul-agent-8500
 
 # Command will
 # 1. Write Consul Template File
