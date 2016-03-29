@@ -1,12 +1,12 @@
 FROM nginx:1.8
 
 #Install Curl
-RUN apt-get update -qq && apt-get -y install curl
+RUN apt-get update -qq && apt-get -y install curl && apt-get install unzip
 
 #Download and Install Consul Template
-ENV CT_URL https://github.com/hashicorp/consul-template/archive/v0.12.1.tar.gz
-RUN curl -L $CT_URL | \
-tar -C /usr/local/bin --strip-components 1 -zxf -
+ENV CT_URL https://releases.hashicorp.com/consul-template/0.14.0/consul-template_0.14.0_linux_amd64.zip
+RUN curl -L $CT_URL -o consul-template.zip
+RUN unzip -d /usr/local/bin/ consul-template.zip
 
 #Setup Consul Template Files
 RUN mkdir /etc/consul-templates
@@ -39,6 +39,6 @@ server {                                 \n\
   }                                      \n\
 }" > $CT_FILE; \
 /usr/sbin/nginx -c $NX_FILE \
-& CONSUL_TEMPLATE_LOG=debug consul-template \
+& CONSUL_TEMPLATE_LOG=debug /usr/local/bin/consul-template \
   -consul=$CONSUL \
   -template "$CT_FILE:$NX_FILE:/usr/sbin/nginx -s reload";
