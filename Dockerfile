@@ -20,7 +20,4 @@ ENV SERVICE consul-agent-8500
 #Setup Nginx File
 ADD ./api.ctmpl $CT_FILE
 
-CMD /usr/sbin/nginx -c $NX_FILE \
-& CONSUL_TEMPLATE_LOG=debug /usr/local/bin/consul-template \
-  -consul=$CONSUL \
-  -template "$CT_FILE:$NX_FILE:/usr/sbin/nginx -s reload";
+CMD /bin/bash
