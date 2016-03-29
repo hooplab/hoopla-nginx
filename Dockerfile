@@ -11,14 +11,14 @@ RUN unzip -d /usr/local/bin/ consul-template.zip
 #Setup Consul Template Files
 RUN mkdir /etc/consul-templates
 ENV CT_FILE /etc/consul-templates/nginx.conf
+ENV NX_FILE /etc/nginx/nginx.conf
 
 #Default Variables
 ENV CONSUL consul:8500
 ENV SERVICE consul-agent-8500
 
 #Setup Nginx File
-ENV NX_FILE /etc/nginx/nginx.conf
-ADD ./nginx.conf $NX_FILE
+ADD ./api.ctmpl $CT_FILE
 
 CMD /usr/sbin/nginx -c $NX_FILE \
 & CONSUL_TEMPLATE_LOG=debug /usr/local/bin/consul-template \
